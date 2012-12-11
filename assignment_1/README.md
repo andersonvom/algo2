@@ -27,3 +27,28 @@ Example
     Weighted sum (using job ratio):  21025
 
 
+## Prim's Minimum Spanning Tree
+
+An implementation of Prim's Minimum Spanning Tree greedy algorithm.
+
+### Input
+
+Two integers `N` (number of nodes) and `E` (number of edges) of an undirected graph with integer edge costs on the first line of input. Then there are `E` lines, each containing excetly three integers `V1` and `V2` (the two vertices of the edge) and `C` (the edge cost). You should NOT assume that edge costs are positive, nor should you assume that they are distinct.
+
+### Output
+
+The overall integer cost of a minimum spanning tree, which may or may not be negative.
+
+Example
+-------
+
+### Sample Input
+    5 4
+    1 2 6807
+    2 3 -8874
+    3 4 -1055
+    4 5 4414
+
+### Sample Output
+    1292
+
