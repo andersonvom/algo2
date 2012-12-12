@@ -2,27 +2,10 @@
 
 require 'set'
 
-=begin
-class Vertex
-  attr_accessor :id, :edge
-
-  def initialize(id, edge=nil)
-    self.id = id
-    self.edge = edge
-  end
-
-  def to_s
-    id.to_s
-  end
-end
-=end
-
 class Edge
   attr_accessor :v1, :v2, :cost
 
   def initialize(id1, id2, cost)
-    #self.v1 = Vertex.new id1, self
-    #self.v2 = Vertex.new id2, self
     self.v1 = id1
     self.v2 = id2
     self.cost = cost
@@ -64,15 +47,16 @@ class PrimsMST
     t = []
     while x != v
       cheapest = nil
-
+      in_cut = []
       e.each do |i|
-        #e.delete i if i.in_cut? x
+        in_cut << i if i.in_cut? x
         if i.cross_cut? x
           cheapest = i
-          e.delete i
+          in_cut << i
           break
         end
       end
+      e -= in_cut
 
       t << cheapest
       x.add cheapest.v1
