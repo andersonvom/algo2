@@ -17,7 +17,7 @@ class Scheduling
   end
 
   def job_ratio(job)
-    job[:weight] / job[:length]
+    job[:weight].to_f / job[:length]
   end
 
   def diff_weight_length(job1, job2)
