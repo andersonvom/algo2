@@ -20,6 +20,18 @@ class Edge
     x.include? v1 and x.include? v2
   end
 
+  def <(e)
+    self.cost < e.cost
+  end
+
+  def >(e)
+    self.cost > e.cost
+  end
+
+  def <=>(e)
+    self.cost <=> e.cost
+  end
+
   def to_s
     "(#{v1}...#{cost}...#{v2})"
   end
@@ -45,6 +57,7 @@ class PrimsMST
     x = Set.new [self.vertices.first]
     v = Set.new self.vertices
     e = self.edges.dup.sort! { |e1, e2| e1.cost <=> e2.cost }
+    h = Heap.new e
     t = []
     while x != v
       cheapest = nil
