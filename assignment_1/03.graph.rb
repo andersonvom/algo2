@@ -64,14 +64,30 @@ end
 class Graph
   attr_accessor :vertices
 
-  def initialize(*vertices)
+  def initialize(*ary)
     self.vertices = Hash.new
+    vertices = ary
+    vertices = ary.first if ary.count == 1
     vertices.each do |v|
-      self.vertices[v] = v
+      add_vertex v
     end
   end
 
-  def add_vertex(v)
+  def add_vertex(*vertices)
+    vertices.each do |v|
+      self.vertices[v.id] = v
+    end
+  end
+
+  def all_edges
+    edges = []
+    all_vertices.each do |v|
+      edges += v.edges
+    end
+    edges.uniq
+  end
+
+  def all_vertices
     self.vertices.values
   end
 
