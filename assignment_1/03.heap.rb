@@ -24,6 +24,8 @@ class Heap
 
   def delete_at(idx)
     return unless tree[idx]
+    return tree.delete_at(idx) if idx == tree.count - 1
+
     elem = self.tree[idx]
     last = self.tree.delete_at -1
     self.tree[idx] = last if self.tree[idx]
