@@ -2,62 +2,20 @@
 
 require 'set'
 require './03.heap.rb'
-
-class Edge
-  attr_accessor :v1, :v2, :cost
-
-  def initialize(id1, id2, cost)
-    self.v1 = id1
-    self.v2 = id2
-    self.cost = cost
-  end
-
-  def cross_cut?(x)
-    (x.include? v1 and !x.include? v2) or (x.include? v2 and !x.include? v1)
-  end
-
-  def in_cut?(x)
-    x.include? v1 and x.include? v2
-  end
-
-  def <(e)
-    self.cost < e.cost
-  end
-
-  def >(e)
-    self.cost > e.cost
-  end
-
-  def <=>(e)
-    self.cost <=> e.cost
-  end
-
-  def to_s
-    "(#{v1}...#{cost}...#{v2})"
-  end
-end
+require './03.graph.rb'
 
 class PrimsMST
 
-  attr_accessor :vertices, :edges, :tree
+  attr_accessor :graph
 
-  def initialize
-    self.vertices = []
-    self.edges = []
-  end
-
-  def add_edge(id1, id2, cost)
-    e = Edge.new(id1, id2, cost)
-    self.vertices << e.v1
-    self.vertices << e.v2
-    self.edges << e
+  def initialize(graph)
+    self.graph = graph
   end
 
   def tree
-    x = Set.new [self.vertices.first]
-    v = Set.new self.vertices
-    e = self.edges.dup.sort! { |e1, e2| e1.cost <=> e2.cost }
-    h = Heap.new e
+    x = Set.new [graph.all_vertices.first]
+    v = Set.new graph.all_vertices
+    e = graph.all_edges.sort { |e1, e2| e1.cost <=> e2.cost }
     t = []
     while x != v
       cheapest = nil
@@ -79,7 +37,8 @@ class PrimsMST
     t
   end
 
-  def tree_cost(t)
+  def tree_cost(t = nil)
+    t ||= tree
     t.reduce(0) { |sum, e| sum + e.cost }
   end
 
@@ -89,17 +48,18 @@ if __FILE__ == $0
   puts "Start"
 
   num_nodes, num_edges = gets.split(" ").map { |num| num.to_i }
-  prims_mst = PrimsMST.new
+  graph = Graph.new
 
   num_edges.times do |i|
-    v1, v2, cost = gets.split(" ").map { |num| num.to_i }
-    #puts "#{v1} #{v2} #{cost}"
-    prims_mst.add_edge(v1, v2, cost)
+    idx1, idx2, cost = gets.split(" ").map { |num| num.to_i }
+    v1 = graph.vertices[idx1] || Vertex.new(idx1)
+    v2 = graph.vertices[idx2] || Vertex.new(idx2)
+    e = Edge.new v1, v2, cost
+    graph.add_vertex v1, v2
   end
 
-  tree = prims_mst.tree
-  #puts tree
-  puts prims_mst.tree_cost tree
+  prims_mst = PrimsMST.new graph
+  puts prims_mst.tree_cost
 
   puts "End"
 end
