@@ -22,6 +22,18 @@ class Heap
     delete_at(1)
   end
 
+  def delete(elem)
+    return unless elem
+    removed = nil
+    self.tree.each_with_index do |e, idx|
+      if e == elem
+        removed = delete_at(idx)
+        break
+      end
+    end
+    removed
+  end
+
   def delete_at(idx)
     return unless tree[idx]
     return tree.delete_at(idx) if idx == tree.count - 1
