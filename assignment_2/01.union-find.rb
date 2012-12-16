@@ -40,6 +40,7 @@ class UnionFind
     group2.each do |elem|
       self.elements[elem.id] = leader1
       self.groups[leader1.id][:elements].push elem
+      self.groups[leader1.id][:count] += 1
     end
     self.groups.delete leader2.id
     self
@@ -93,6 +94,13 @@ describe UnionFind do
     @u.add @v1, @v2, @v3
     @u.union @v1, @v2
     @u.groups.size.should == 2
+  end
+
+  it "should update group count when merging" do
+    @u.add @v1, @v2, @v3
+    @u.union @v1, @v2
+    @u.groups[@v1.id][:count].should == 2
+    @u.groups[@v3.id][:count].should == 1
   end
 
   it "should not merge nil groups" do
