@@ -28,7 +28,8 @@ class UnionFind
 
     leader1 = elements[elem1.id]
     leader2 = elements[elem2.id]
-    return self if leader1 == leader2 or (leader1.nil? or leader2.nil?)
+    return self if leader1 == leader2
+    return self if leader1.nil? or leader2.nil?
 
     # switch groups if groups2 if bigger than group1 to minimize operations
     if groups[leader1.id][:count] < groups[leader2.id][:count]
