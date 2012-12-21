@@ -1,11 +1,11 @@
 #!/usr/bin/ruby
 
 class Vertex
-  attr_accessor :id, :edges
+  attr_accessor :id, :edges, :params
 
-  def initialize(id, *edges)
+  def initialize(id, params = {})
     self.id = id
-    self.edges = edges
+    self.params = params
   end
 
   def neighbors
