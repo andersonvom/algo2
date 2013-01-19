@@ -18,7 +18,7 @@ class FloydWarshall
         length = Float::INFINITY
         length = 0 if i == j
         length = edges["#{i},#{j}"].length if edges["#{i},#{j}"]
-        path_lengths[i, j, 0] = length
+        path_lengths[i][j][0] = length
         shortest_path = length if length < shortest_path
       end
     end
@@ -28,10 +28,10 @@ class FloydWarshall
       num_vertices.times do |i|
         num_vertices.times do |j|
           length = [
-            path_lengths[i, j, k-1],
-            path_lengths[i, k, k-1] + path_lengths[k, j, k-1]
+            path_lengths[i][j][k-1],
+            path_lengths[i][k][k-1] + path_lengths[k][j][k-1]
           ].min
-          path_lengths[i, j, 0] = length
+          path_lengths[i][j][k] = length
           shortest_path = length if length < shortest_path
           return false if i == j and length < 0 # negative-cost cycle
         end
