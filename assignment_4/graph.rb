@@ -96,11 +96,15 @@ class Graph
   end
 
   def all_edges
-    edges = []
+    edges = {}
     all_vertices.each do |v|
-      edges += v.edges
+      v.edges.each do |e|
+        v1 = e.vertices.first
+        v2 = e.vertices.last
+        edges["#{v1.id},#{v2.id}"] = e
+      end
     end
-    edges.uniq
+    edges
   end
 
   def all_vertices
