@@ -7,17 +7,19 @@ class FloydWarshall
   end
 
   def run
-    num_vertices = graph.all_vertices.size
-    self.path_lengths = Array.new(num_vertices) { Array.new(num_vertices) { Array.new(num_vertices) } }
+    vertices = graph.all_vertices
+    num_vertices = vertices.size
     edges = graph.all_edges
+    self.path_lengths = Array.new(num_vertices) { Array.new(num_vertices) { Array.new(num_vertices) } }
     shortest_path = Float::INFINITY
 
     # Initialize
     num_vertices.times do |i|
       num_vertices.times do |j|
+        vi, vj = vertices[i], vertices[j]
         length = Float::INFINITY
         length = 0 if i == j
-        length = edges["#{i},#{j}"].length if edges["#{i},#{j}"]
+        length = edges["#{vi.id},#{vj.id}"].length if edges["#{vi.id},#{vj.id}"]
         path_lengths[i][j][0] = length
         shortest_path = length if length < shortest_path
       end
