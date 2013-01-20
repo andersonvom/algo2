@@ -7,20 +7,18 @@ class FloydWarshall
     self.graph = graph
   end
 
-  def run
-    vertices = graph.all_vertices
-    num_vertices = vertices.size
-    edges = graph.all_edges
-    self.path_lengths = Array.new(num_vertices) { Array.new(num_vertices) { Array.new(num_vertices) } }
+  def run(first_vertex = 1)
+    num_vertices = graph[:num_vertices]
+    vertices = (first_vertex..num_vertices)
+    self.path_lengths = Array.new(num_vertices+1) { Array.new(num_vertices+1) { Array.new(num_vertices+1) } } # padding
     shortest_path = Float::INFINITY
 
     # Initialize
-    num_vertices.times do |i|
-      num_vertices.times do |j|
-        vi, vj = vertices[i], vertices[j]
+    vertices.each do |i|
+      vertices.each do |j|
         length = Float::INFINITY
         length = 0 if i == j
-        length = edges["#{vi.id},#{vj.id}"].length if edges["#{vi.id},#{vj.id}"]
+        length = graph[:edges][i][j] if graph[:edges][i][j]
         path_lengths[i][j][0] = length
         shortest_path = length if length < shortest_path
       end
@@ -28,8 +26,8 @@ class FloydWarshall
 
     # Run
     (1..num_vertices-1).each do |k|
-      num_vertices.times do |i|
-        num_vertices.times do |j|
+      vertices.each do |i|
+        vertices.each do |j|
           length = [
             path_lengths[i][j][k-1],
             path_lengths[i][k][k-1] + path_lengths[k][j][k-1]
@@ -46,17 +44,8 @@ class FloydWarshall
 end
 
 if $0 == __FILE__
-  num_vertices, num_edges = gets.split(" ").map { |i| i.to_i }
-
-  graph = Graph.new
-  num_edges.times do
-    idx1, idx2, length = gets.split(" ").map { |i| i.to_i }
-    v1 = graph.vertices[idx1] || Vertex.new(idx1)
-    v2 = graph.vertices[idx2] || Vertex.new(idx2)
-    e = Edge.new v1, v2, {length: length}
-    graph.add_vertex v1, v2
-  end
-
+  input = $1 ? File.open($1) : STDIN
+  graph = Graph.read_graph(input)
   apsp = FloydWarshall.new(graph)
   puts apsp.run
 end
