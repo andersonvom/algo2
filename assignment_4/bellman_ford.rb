@@ -61,12 +61,8 @@ def read_graph(input)
 end
 
 if $0 == __FILE__
-  graph = nil
-  if $1
-    graph = read_graph(File.open $1) if $1
-  else
-    graph = read_graph(STDIN)
-  end
+  input = $1 ? File.open($1) : STDIN
+  graph = read_graph(input)
 
   bf = BellmanFord.new(graph)
   source = graph.vertices[1]
