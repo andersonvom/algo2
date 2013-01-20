@@ -1,3 +1,5 @@
+require './graph.rb'
+
 class BellmanFord
   attr_accessor :graph, :path_lengths
 
@@ -36,5 +38,24 @@ class BellmanFord
     return false if improved_results
     shortest_path
   end
+end
+
+if $0 == __FILE__
+  require 'pry'
+  num_vertices, num_edges = gets.split(" ").map { |i| i.to_i }
+
+  graph = Graph.new
+  num_edges.times do
+    idx1, idx2, length = gets.split(" ").map { |i| i.to_i }
+    v1 = graph.vertices[idx1] || Vertex.new(idx1)
+    v2 = graph.vertices[idx2] || Vertex.new(idx2)
+    e = Edge.new v1, v2, {length: length}
+    graph.add_vertex v1, v2
+  end
+
+  bf = BellmanFord.new(graph)
+  source = graph.vertices[1]
+  puts bf.run(source)
+
 end
 
