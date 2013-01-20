@@ -40,22 +40,36 @@ class BellmanFord
   end
 end
 
-if $0 == __FILE__
-  require 'pry'
-  num_vertices, num_edges = gets.split(" ").map { |i| i.to_i }
+def read_graph(input)
+  info = input.lines.to_a if input.is_a? File
+  data = gets if input == STDIN
+  data = info.shift if input.is_a? File
+  num_vertices, num_edges = data.split(" ").map { |i| i.to_i }
 
   graph = Graph.new
   num_edges.times do
-    idx1, idx2, length = gets.split(" ").map { |i| i.to_i }
+    data = gets if input == STDIN
+    data = info.shift if input.is_a? File
+    idx1, idx2, length = data.split(" ").map { |i| i.to_i }
     v1 = graph.vertices[idx1] || Vertex.new(idx1)
     v2 = graph.vertices[idx2] || Vertex.new(idx2)
     e = Edge.new v1, v2, {length: length}
     graph.add_vertex v1, v2
   end
 
+  graph
+end
+
+if $0 == __FILE__
+  graph = nil
+  if $1
+    graph = read_graph(File.open $1) if $1
+  else
+    graph = read_graph(STDIN)
+  end
+
   bf = BellmanFord.new(graph)
   source = graph.vertices[1]
   puts bf.run(source)
-
 end
 
