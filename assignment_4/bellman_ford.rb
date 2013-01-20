@@ -59,7 +59,6 @@ class BellmanFord
 end
 
 if $0 == __FILE__
-  require 'pry'
   input = $1 ? File.open($1) : STDIN
   graph = Graph.read_graph(input)
   bf = BellmanFord.new(graph)
