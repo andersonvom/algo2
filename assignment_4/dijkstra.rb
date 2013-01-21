@@ -1,6 +1,6 @@
 require './graph.rb'
 
-class Djikstra
+class Dijkstra
   attr_accessor :graph
 
   def initialize(a_graph)
