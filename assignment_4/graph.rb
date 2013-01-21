@@ -1,5 +1,11 @@
 class Graph
 
+  def self.empty_graph
+    edges = Hash.new { |hash, key| hash[key] = {} }
+    in_edges = Hash.new { |hash, key| hash[key] = {} }
+    graph = {num_vertices: 0, num_edges: 0, edges: edges, in_edges: in_edges}
+  end
+
   def self.read_graph(input)
     info = input
     info = input.lines.to_a if input.is_a? File
