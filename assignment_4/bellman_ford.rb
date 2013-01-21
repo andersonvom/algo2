@@ -40,20 +40,21 @@ class BellmanFord
 
       # shortest paths will be found at most at iteration n-1
       # last iteration (n) should not improve results, unless there is a negative-cost cycle
-      unless improved_results
-        shortest_path = path_lengths[i].min
-        return shortest_path
-      end
+      return path_lengths[i] unless improved_results
     end
 
     false # there is a negative-cost cycle
   end
 
-  def negative_cycle?
+  def weight_shifts
     graph[:num_vertices] += 1
-    negative_cycle = !(run(0, 0) and true)
+    weight_shifts = run(0, 0)
     graph[:num_vertices] -= 1
-    negative_cycle
+    weight_shifts
+  end
+
+  def negative_cycle?
+    !(weight_shifts and true)
   end
 
 end
@@ -62,14 +63,6 @@ if $0 == __FILE__
   input = $1 ? File.open($1) : STDIN
   graph = Graph.read_graph(input)
   bf = BellmanFord.new(graph)
-  shortest_shortest_path = Float::INFINITY
-  (1..graph[:num_vertices]).each do |source|
-    s = Time.now
-    shortest_path = bf.run(source) || Float::INFINITY
-    shortest_shortest_path = shortest_path if shortest_path < shortest_shortest_path
-    e = Time.now
-    puts "source ##{source}: #{shortest_path} in #{e-s} seconds"
-  end
-  puts "Shortest shortest path: #{shortest_shortest_path}"
+  puts bf.run(source).inspect
 end
 
