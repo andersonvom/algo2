@@ -24,10 +24,12 @@ class Johnsons
   end
 
   def run
+    yield :bellman_ford if block_given?
     self.weight_shifts = BellmanFord.new(graph).weight_shifts
     return false unless weight_shifts # negative-cost cycle detected!
 
     # shift weights in G
+    yield :shift_weights if block_given?
     graph_shifted[:num_vertices] = graph[:num_vertices]
     graph_shifted[:num_edges] = graph[:num_edges]
     graph[:edges].each do |u, edges|
@@ -36,22 +38,23 @@ class Johnsons
       end
     end
 
+    yield :dijkstra if block_given?
     vertices = (1..graph_shifted[:num_vertices]).to_a
     vertices.each do |u|
-      puts u if u%100==0
       distances = Dijkstra.new(graph_shifted).run(u)
       path_distances[u] = unshift_weights(u, distances)
     end
+
+    yield :done if block_given?
     path_distances
   end
 
 end
 
 if $0 == __FILE__
-  require 'pry'
   input = $1 ? File.open($1) : STDIN
   graph = Graph.read_graph(input)
-  results = Johnsons.new(graph).run
+  results = Johnsons.new(graph).run { |e| puts e.to_s; system "date" }
   shortest_shortest = results.map { |v, dist| dist.values.min }.min if results
   puts shortest_shortest
 end
