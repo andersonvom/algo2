@@ -50,7 +50,9 @@ class Dijkstra
         end
       end
     end
-    distances
+    shortest_distances = {}
+    distances.map { |v, dist| shortest_distances[v] = dist.distance }
+    shortest_distances
   end
 end
 
