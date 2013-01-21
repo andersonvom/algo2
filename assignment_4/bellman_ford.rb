@@ -18,12 +18,10 @@ class BellmanFord
   def run(source, first_vertex = 1)
     num_vertices = graph[:num_vertices]
     self.path_lengths = Array.new(num_vertices+1) { Array.new(num_vertices+1) { Float::INFINITY } } # +1 padding to optimize index resolution
-    shortest_path = Float::INFINITY
 
     # Initialize
     path_lengths[first_vertex][source] = 0
     improved_results = false
-    shortest_path = Float::INFINITY
 
     ((first_vertex+1)..graph[:num_vertices]).each do |i|
       improved_results = false
@@ -34,7 +32,6 @@ class BellmanFord
         min_w_length ||= Float::INFINITY # if no in-edges, cost is infinite
 
         path_lengths[i][v] = [ path_lengths[i-1][v], min_w_length ].min
-        shortest_path = path_lengths[i][v] if path_lengths[i][v] < shortest_path
         improved_results = true if path_lengths[i][v] < path_lengths[i-1][v]
       end
 
