@@ -20,6 +20,14 @@ class Heap
     self
   end
 
+  def modify(elem)
+    idx = indices[elem]
+    return unless idx
+    yield elem
+    bubble_up elem, indices[elem]
+    bubble_down elem, indices[elem]
+  end
+
   def delete_minimum
     delete_at(1)
   end
