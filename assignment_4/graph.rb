@@ -19,7 +19,7 @@ class Graph
     num_edges.times do
       data = gets if input == STDIN
       data = info.shift if input != STDIN
-      idx1, idx2, length = data.split(" ").map { |i| i.to_i }
+      idx1, idx2, length = data.split(" ").map { |i| i.index(".") ? i.to_f : i.to_i }
       graph[:edges][idx1].store(idx2, length)
       graph[:in_edges][idx2].store(idx1, length)
     end
